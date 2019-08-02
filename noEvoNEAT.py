@@ -8,14 +8,15 @@ import numpy as np
 class Net():
 	def create(self):
 		#Manually set genes, haven't gotten to the evolution step yet
-		self.gene = [[[1],[7],[.2],[1],[1]],
-    				 [[2],[8],[.7],[1],[2]],
-    				 [[3],[7],[.4],[1],[3]],
-    				 [[4],[9],[.1],[1],[4]],
-    				 [[7],[6],[.9],[1],[5]],
-    				 [[8],[9],[.8],[1],[6]],
-    				 [[9],[6],[.5],[1],[7]],
-    				 [[8],[5],[1],[1],[8]]]
+		#[[in-node,out-node,weight,activated,innovation]]
+		self.gene = [[1,7,.2,1,1],
+    				 [2,8,.7,1,2],
+    				 [3,7,.4,1,3],
+    				 [4,9,.1,1,4],
+    				 [7,6,.9,1,5],
+    				 [8,9,.8,1,6],
+    				 [9,6,.5,1,7],
+    				 [8,5,1,1,8]]
 		
 	#sigmoid as activation function
 	def sig(self, x, derivative = False):
@@ -30,16 +31,16 @@ class Net():
 		allfound = []
 		if i is True:
 			for connection in self.gene:
-				for incon in connection[0]:
-					if value in incon:
-						allfound.append(connection)
+				incon = connection[0]
+				if value in incon:
+					allfound.append(connection)
 		if o is True:
 			for connection in self.gene:
-				for outcon in connection[1]:
-					if type(outcon) is int:
-						outcon = [outcon]
-					if value in outcon:
-						allfound.append(connection)
+				outcon = connection[1]
+				if type(outcon) is int:
+					outcon = [outcon]
+				if value in outcon:
+					allfound.append(connection)
 
 		return(allfound)
 
@@ -55,11 +56,11 @@ class Net():
 		else:
 			allfound = self.findio(o = True, value = node)
 			for connection in allfound:
-				if connection[3][0]:
+				if connection[3]:
 					E = []
-					E.append(self.compute(node = connection[0][0], observation = observation))
+					E.append(self.compute(node = connection[0], observation = observation))
 					E = sum(E)
-					WE = E * connection[2][0]
+					WE = E * connection[2]
 					sigWE = self.sig(WE)
 			return(sigWE)
 
